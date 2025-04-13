@@ -32,7 +32,6 @@ abstract class Conexion {
         ];
     }
 
-    // METODO PARA CONSULTAR INFORMACION
     public function servir($sql)
     {
         $conexion = self::conectar();

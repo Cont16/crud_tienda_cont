@@ -39,7 +39,6 @@ $colores = ['danger', 'success'];
 
 <div class="container mt-2">
     <div class="row justify-content-center">
-        <!-- se debe de corregir para mostrar el color de la alerta -->
         <div class="col-lg-6 bg-<?= $resultado['codigo'] ?>">
             <h3 class="text-center"> <?= $resultado['mensaje'] ?></h3>
         </div>
