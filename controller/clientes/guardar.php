@@ -1,0 +1,51 @@
+<?php
+
+include_once '../../views/templates/header.php';
+
+ini_set('display_errors', '1');
+ini_set('display_startup_errors', '1');
+error_reporting(E_ALL);
+
+require '../../modelos/Cliente.php';
+
+$_POST['cli_nombres'] = htmlspecialchars($_POST['cli_nombres']);
+$_POST['cli_apellidos'] = htmlspecialchars($_POST['cli_apellidos']);
+$_POST['cli_telefono'] = filter_var($_POST['cli_telefono'], FILTER_SANITIZE_NUMBER_INT);
+$_POST['cli_nit'] = filter_var($_POST['cli_nit'], FILTER_SANITIZE_NUMBER_INT);
+
+try {
+
+
+    $nuevo_usario = new Cliente($_POST);
+    $usuario = $nuevo_usario->guardar();
+
+    $resultado = [
+        'mensaje' => 'CLIENTE INGRESADO SATISFACTORIAMENTE',
+        'codigo' => 1
+    ];
+} catch (Exception $e) {
+
+    $resultado = [
+        'mensaje' => 'OCURRIO UN ERROR EN LA EJECUCIÓN',
+        'detalle' => $e->getMessage(),
+        'codigo' => 0
+    ];
+}
+
+$colores = ['danger', 'success'];
+
+
+?>
+
+<div class="container mt-2">
+    <div class="row justify-content-center">
+        <!-- se debe de corregir para mostrar el color de la alerta -->
+        <div class="col-lg-6 bg-<?= $resultado['codigo'] ?>">
+            <h3 class="text-center"> <?= $resultado['mensaje'] ?></h3>
+        </div>
+    </div>
+</div>
+
+<?php
+
+include_once '../../views/templates/footer.php';
