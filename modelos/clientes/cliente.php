@@ -25,9 +25,16 @@ class Cliente extends Conexion
     public function guardar()
     {
 
-        $sql = "INSERT INTO clientes(cli_nombres, cli_apellidos, cli_telefono, cli_nit, cli_situacion)
-                VALUES ('$this->cli_nombres', '$this->cli_apellidos', '$this->cli_telefono', '$this->cli_nit', '$this->cli_situacion')";
-        $data = $this->ejecutar($sql);
-        return $data;
+        $sql = "INSERT INTO clientes(cli_nombres, cli_apellidos, cli_nit, cli_telefono, cli_situacion)
+                VALUES (:nombre, :apellidos, :nit, :telefono, :situacion)";
+        $params = [
+            ':nombre' => $this->cli_nombres,
+            ':apellidos' => $this->cli_apellidos,
+            ':nit' => $this->cli_nit,
+            ':telefono' => $this->cli_telefono,
+            ':situacion' => $this->cli_situacion
+        ];
+
+        return $this->ejecutar($sql, $params);
     }
 }

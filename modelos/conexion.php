@@ -19,29 +19,31 @@ abstract class Conexion {
         return self::$conexion;
     }
 
-    public function ejecutar($sql)
+    public function ejecutar($sql, $params = [])
     {
         $conexion = self::conectar();
         $sentencia = $conexion->prepare($sql);
-        $resultado = $sentencia->execute();
+        $resultado = $sentencia->execute($params);
         $idInsertado = $conexion->lastInsertId();
+        self::$conexion = null; 
+
         return [
             "resultado" => $resultado,
             "id" => $idInsertado
         ];
     }
 
-    public function servir($sql)
+    public function servir($sql, $params = [])
     {
         $conexion = self::conectar();
         $sentencia = $conexion->prepare($sql);
         $sentencia->execute();
         $data = $sentencia->fetchAll(PDO::FETCH_ASSOC);
-
         $datos = [];
         foreach ($data as $k => $v) {
             $datos[] = array_change_key_case($v, CASE_LOWER);
         }
+        self::$conexion = null;
 
 
         return $datos;
