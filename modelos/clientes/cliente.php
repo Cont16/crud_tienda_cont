@@ -37,4 +37,29 @@ class Cliente extends Conexion
 
         return $this->ejecutar($sql, $params);
     }
+
+
+public function buscar(...$columnas)
+{
+    $cols = count($columnas) > 0 ? implode(',', $columnas) : '*';
+    $sql = "SELECT $cols FROM clientes WHERE cli_situacion = 1";
+    $params = [];
+
+    if (!empty($this->cli_nombres)) {
+        $sql .= " AND cli_nombres LIKE :nombres";
+        $params[':nombres'] = "%{$this->cli_nombres}%";
+    }
+
+    if (!empty($this->cli_apellidos)) {
+        $sql .= " AND cli_apellidos LIKE :apellidos";
+        $params[':apellidos'] = "%{$this->cli_apellidos}%";
+    }
+
+    if (!empty($this->cli_nit)) {
+        $sql .= " AND cli_nit = :nit";
+        $params[':nit'] = $this->cli_nit;
+    }
+
+    return self::servir($sql, $params); // ¡ya acepta parámetros!
+}
 }

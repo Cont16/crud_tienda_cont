@@ -37,7 +37,7 @@ abstract class Conexion {
     {
         $conexion = self::conectar();
         $sentencia = $conexion->prepare($sql);
-        $sentencia->execute();
+        $sentencia->execute($params);
         $data = $sentencia->fetchAll(PDO::FETCH_ASSOC);
         $datos = [];
         foreach ($data as $k => $v) {
