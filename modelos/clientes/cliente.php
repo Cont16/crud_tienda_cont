@@ -62,4 +62,42 @@ public function buscar(...$columnas)
 
     return self::servir($sql, $params); // ¡ya acepta parámetros!
 }
+
+public function buscarID($ID){
+        
+    $sql = "SELECT * FROM cliente_crud where cli_situacion = 1 AND cli_codigo = $ID ";
+
+    $resultado =  array_shift(self::servir($sql));
+    return $resultado;
+}
+
+public function modificar()
+{
+    $sql = "UPDATE cliente_crud 
+            SET cli_nombres = :nombres, 
+                cli_apellidos = :apellidos, 
+                cli_nit = :nit, 
+                cli_telefono = :telefono 
+            WHERE cli_situacion = 1 AND cli_codigo = :codigo";
+
+    $params = [
+        ':nombres'   => $this->cli_nombres,
+        ':apellidos' => $this->cli_apellidos,
+        ':nit'      => $this->cli_nit,
+        ':telefono' => $this->cli_telefono,
+        ':situacion'   => $this->cli_situacion
+    ];
+
+    return $this->ejecutar($sql, $params);
+}
+
+public function eliminar() {
+    $sql = "UPDATE cliente_crud SET cli_situacion = 0 WHERE cli_codigo = :codigo";
+
+    $params = [
+        ':situacion' => $this->cli_situacion
+    ];
+
+    return $this->ejecutar($sql, $params);
+}
 }
