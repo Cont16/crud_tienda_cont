@@ -1,14 +1,14 @@
 <?php
 
-require '../../modelos/cliente.php';
+require '../../modelos/clientes/cliente.php';
 
-$_POST['cli_codigo'] = filter_var($_POST['cli_codigo'], FILTER_VALIDATE_INT);
-$_POST['cli_nombre'] = htmlspecialchars($_POST['cli_nombre']);
-$_POST['cli_apellido'] = htmlspecialchars($_POST['cli_apellido']);
+$_POST['cli_id'] = filter_var($_POST['cli_id'], FILTER_VALIDATE_INT);
+$_POST['cli_nombres'] = htmlspecialchars($_POST['cli_nombres']);
+$_POST['cli_apellidos'] = htmlspecialchars($_POST['cli_apellidos']);
 $_POST['cli_nit'] = filter_var($_POST['cli_nit'], FILTER_VALIDATE_INT);
 $_POST['cli_telefono'] = filter_var($_POST['cli_telefono'], FILTER_VALIDATE_INT);
 
-if ($_POST['cli_nombre'] == '' || $_POST['cli_apellido' == ''] || $_POST['cli_nit'] == '' || $_POST['cli_telefono'] == '') {
+if ($_POST['cli_nombres'] == '' || $_POST['cli_apellidos'] == '' || $_POST['cli_nit'] == '' || $_POST['cli_telefono'] == '') {
 
     $resultado = [
         'mensaje' => 'DEBE VALIDAR LOS DATOS',
@@ -44,7 +44,7 @@ if ($_POST['cli_nombre'] == '' || $_POST['cli_apellido' == ''] || $_POST['cli_ni
 
 $alertas = ['danger', 'success', 'warning'];
   
-include_once '../../vistas/templates/header.php'; ?>
+include_once '../../views/templates/header.php'; ?>
 
 <div class="row justify-content-center">
     <div class="col-lg-6 alert alert-<?=$alertas[$resultado['codigo']] ?>" role="alert">
@@ -53,7 +53,7 @@ include_once '../../vistas/templates/header.php'; ?>
 </div>
 <div class="row justify-content-center">
     <div class="col-lg-6">
-        <a href="../../vistas/clientes/buscar.php" class="btn btn-primary w-100">Regresar</a>
+        <a href="../../views/clientes/buscar.php" class="btn btn-primary w-100">Regresar</a>
     </div>
 </div>
 

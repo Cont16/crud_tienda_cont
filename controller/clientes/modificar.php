@@ -10,8 +10,8 @@ require '../../modelos/cliente.php';
 try {
     $nit = $_GET['cli_nit'];
     $telefono = $_GET['cli_telefono'];
-    $_GET['cli_nombre'] = htmlspecialchars($_GET['cli_nombre']);
-    $_GET['cli_apellido'] = htmlspecialchars($_GET['cli_apellido']);
+    $_GET['cli_nombres'] = htmlspecialchars($_GET['cli_nombres']);
+    $_GET['cli_apellidos'] = htmlspecialchars($_GET['cli_apellidos']);
     $_GET['cli_nit'] = filter_var($nit, FILTER_VALIDATE_INT);
     $_GET['cli_telefono'] = filter_var($telefono, FILTER_VALIDATE_INT);
 
@@ -31,7 +31,7 @@ try {
 }
 $alertas = ['danger', 'success', 'warning'];
 
-include_once '../../vistas/templates/header.php'; ?>
+include_once '../../views/templates/header.php'; ?>
 
 <div class="row justify-content-center">
     <div class="col-lg-6 alert alert-<?=$alertas[$resultado['codigo']] ?>" role="alert">
@@ -40,7 +40,7 @@ include_once '../../vistas/templates/header.php'; ?>
 </div>
 <div class="row justify-content-center">
     <div class="col-lg-6">
-        <a href="../../vistas/clientes/buscar.php" class="btn btn-primary w-100">Regresar</a>
+        <a href="../../views/clientes/buscar.php" class="btn btn-primary w-100">Regresar</a>
     </div>
 </div>
 
@@ -63,8 +63,8 @@ include_once '../../vistas/templates/header.php'; ?>
                         <?php foreach ($cliente as $key => $opcion) : ?>
                             <tr>
                                 <td><?= $key + 1?></td>
-                                <td><?= $opcion['cli_nombre'] ?></td>
-                                <td><?= $opcion['cli_apellido'] ?></td>
+                                <td><?= $opcion['cli_nombres'] ?></td>
+                                <td><?= $opcion['cli_apellidos'] ?></td>
                                 <td><?= $opcion['cli_nit'] ?></td>
                                 <td><?= $opcion['cli_telefono'] ?></td>
                                 <td class="text-center">
@@ -73,8 +73,8 @@ include_once '../../vistas/templates/header.php'; ?>
                                         Acciones
                                     </button>
                                     <ul class="dropdown-menu">
-                                        <li><a class="dropdown-item" href="../../vistas/clientes/ModificarCliente.php?cli_codigo=<?= base64_encode($opcion['cli_codigo'])?>"><i class="bi bi-pencil-square me-2"></i>Modificar</a></li>
-                                        <li><a class="dropdown-item" href="eliminar.php?cli_codigo=<?= base64_encode($opcion['cli_codigo'])?>"><i class="bi bi-trash me-2"></i>Eliminar</a></li>
+                                        <li><a class="dropdown-item" href="../../views/clientes/modificar_cliente.php?cli_id=<?= base64_encode($opcion['cli_id'])?>"><i class="bi bi-pencil-square me-2"></i>Modificar</a></li>
+                                        <li><a class="dropdown-item" href="eliminar.php?cli_id=<?= base64_encode($opcion['cli_id'])?>"><i class="bi bi-trash me-2"></i>Eliminar</a></li>
                                     </ul>
                                 </div>
                                 </td>
