@@ -4,18 +4,17 @@
 // error_reporting(E_ALL);
 
 
-require '../../modelos/clientes/cliente.php';
+require '../../modelos/cliente.php';
 
 // consulta
 try {
     $nit = $_GET['cli_nit'];
     $telefono = $_GET['cli_telefono'];
-    $_GET['cli_nombres'] = htmlspecialchars($_GET['cli_nombres']);
-    $_GET['cli_apellidos'] = htmlspecialchars($_GET['cli_apellidos']);
+    $_GET['cli_nombre'] = htmlspecialchars($_GET['cli_nombre']);
+    $_GET['cli_apellido'] = htmlspecialchars($_GET['cli_apellido']);
     $_GET['cli_nit'] = filter_var($nit, FILTER_VALIDATE_INT);
     $_GET['cli_telefono'] = filter_var($telefono, FILTER_VALIDATE_INT);
 
-    
     $Cli_Consulta = new Cliente($_GET);
     $cliente = $Cli_Consulta->buscar();
     $resultado = [
@@ -32,7 +31,7 @@ try {
 }
 $alertas = ['danger', 'success', 'warning'];
 
-include_once '../../views/templates/header.php'; ?>
+include_once '../../vistas/templates/header.php'; ?>
 
 <div class="row justify-content-center">
     <div class="col-lg-6 alert alert-<?=$alertas[$resultado['codigo']] ?>" role="alert">
@@ -41,7 +40,7 @@ include_once '../../views/templates/header.php'; ?>
 </div>
 <div class="row justify-content-center">
     <div class="col-lg-6">
-        <a href="../../views/clientes/buscar.php" class="btn btn-primary w-100">Regresar</a>
+        <a href="../../vistas/clientes/buscar.php" class="btn btn-primary w-100">Regresar</a>
     </div>
 </div>
 
@@ -64,8 +63,8 @@ include_once '../../views/templates/header.php'; ?>
                         <?php foreach ($cliente as $key => $opcion) : ?>
                             <tr>
                                 <td><?= $key + 1?></td>
-                                <td><?= $opcion['cli_nombres'] ?></td>
-                                <td><?= $opcion['cli_apellidos'] ?></td>
+                                <td><?= $opcion['cli_nombre'] ?></td>
+                                <td><?= $opcion['cli_apellido'] ?></td>
                                 <td><?= $opcion['cli_nit'] ?></td>
                                 <td><?= $opcion['cli_telefono'] ?></td>
                                 <td class="text-center">
@@ -92,4 +91,4 @@ include_once '../../views/templates/header.php'; ?>
         </div>        
     </div>        
 
-<?php include_once '../../view/templates/footer.php'; ?>
+<?php include_once '../../views/templates/footer.php'; ?>
