@@ -92,4 +92,4 @@ include_once '../../views/templates/header.php'; ?>
         </div>        
     </div>        
 
-<?php include_once '../../view/templates/footer.php'; ?>
+<?php include_once '../../views/templates/footer.php'; ?>
