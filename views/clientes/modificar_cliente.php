@@ -1,61 +1,57 @@
 <?php
 
-require '../../modelos/clientes/cliente.php';
+require "../../modelos/clientes/cliente.php";
+include_once '../templates/header.php';
+$_GET['cli_id'] = filter_var( base64_decode($_GET['cli_id']), FILTER_SANITIZE_NUMBER_INT);
 
-$_POST['cli_id'] = filter_var($_POST['cli_id'], FILTER_VALIDATE_INT);
-$_POST['cli_nombres'] = htmlspecialchars($_POST['cli_nombres']);
-$_POST['cli_apellidos'] = htmlspecialchars($_POST['cli_apellidos']);
-$_POST['cli_nit'] = filter_var($_POST['cli_nit'], FILTER_VALIDATE_INT);
-$_POST['cli_telefono'] = filter_var($_POST['cli_telefono'], FILTER_VALIDATE_INT);
+$modificar = new Cliente();
+$ClienteModificar = $modificar->buscarID($_GET['cli_id']);
 
-if ($_POST['cli_nombres'] == '' || $_POST['cli_apellidos'] == '' || $_POST['cli_nit'] == '' || $_POST['cli_telefono'] == '') {
+// var_dump($ClienteModificar);?>
 
-    $resultado = [
-        'mensaje' => 'DEBE VALIDAR LOS DATOS',
-        'codigo' => 2
-    ];
-} else {
-    try {
-     
-        $clienteNuevo = new  cliente($_POST);
-
-        $modficar = $clienteNuevo->modificar();
-
-        $resultado = [
-            'mensaje' => 'CLIENTE MODIFICADO CORRECTAMENTE',
-            'codigo' => 1
-        ];
-
-    } catch (PDOException $pe) {
-        $resultado = [
-            'mensaje' => 'OCURRIO UN ERROR MODIFICANDO EL REGISTRO A LA BD',
-            'detalle' => $pe->getMessage(),
-            'codigo' => 0
-        ];
-    } catch (Exception $e) {
-        $resultado = [
-            'mensaje' => 'OCURRIO ERROR EN LA EJECUCION',
-            'detalle' => $e->getMessage(),
-            'codigo' => 0
-        ];
-    }
-
-}
-
-$alertas = ['danger', 'success', 'warning'];
-  
-include_once '../../views/templates/header.php'; ?>
-
+<h1 class="text-center">Formulario para Modificar Clientes</h1>
 <div class="row justify-content-center">
-    <div class="col-lg-6 alert alert-<?=$alertas[$resultado['codigo']] ?>" role="alert">
-        <?= $resultado['mensaje'] ?>
-    </div>
-</div>
-<div class="row justify-content-center">
-    <div class="col-lg-6">
-        <a href="../../views/clientes/buscar.php" class="btn btn-primary w-100">Regresar</a>
-    </div>
+    <form action="../../controller/clientes/modificar.php" method="POST" class="border bg-light shadow rounded p-4 col-lg-6">
+            <div class="row mb-3">
+            <div class="col">
+                <input type="hidden" name="cli_id" id="cli_id" class="form-control" value="<?= $ClienteModificar['cli_id'] ?>">
+            </div>
+        </div>    
+    <div class="row mb-3">
+            <div class="col">
+                <label for="cli_nombres">Nombre del Cliente</label>
+                <input type="text" name="cli_nombres" id="cli_nombres" class="form-control" value="<?= $ClienteModificar['cli_nombre'] ?>">
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col">
+                <label for="cli_apellidos">Apellidos del Cliente</label>
+                <input type="text" name="cli_apellidos" id="cli_apellidos" class="form-control" value="<?= $ClienteModificar['cli_apellidos'] ?>">
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col">
+                <label for="cli_nit">No. de NIT</label>
+                <input type="number" name="cli_nit" id="cli_nit"  class="form-control" value="<?= $ClienteModificar['cli_nit'] ?>">
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col">
+                <label for="cli_telefono">Telefono</label>
+                <input type="number" name="cli_telefono" id="cli_telefono"  class="form-control" value="<?= $ClienteModificar['cli_telefono'] ?>">
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col">
+                <button type="submit" class="btn btn-info w-100">MODIFICAR</button>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <a href="../../controller/clientes/buscar.php" class="btn btn-success w-100">CANCELAR</a>
+            </div>
+        </div>
+    </form>
 </div>
 
-
-<?php include_once '../../views/templates/footer.php'; ?>
+<?php include_once '../templates/footer.php'; ?>

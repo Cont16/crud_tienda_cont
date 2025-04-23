@@ -1,36 +1,49 @@
 <?php
-// ini_set('display_errors', '1');
-// ini_set('display_startup_errors', '1');
-// error_reporting(E_ALL);
 
+require '../../modelos/clientes/cliente.php';
 
-require '../../modelos/cliente.php';
+$_POST['cli_id'] = filter_var($_POST['cli_id'], FILTER_VALIDATE_INT);
+$_POST['cli_nombres'] = htmlspecialchars($_POST['cli_nombres']);
+$_POST['cli_apellidos'] = htmlspecialchars($_POST['cli_apellidos']);
+$_POST['cli_nit'] = filter_var($_POST['cli_nit'], FILTER_VALIDATE_INT);
+$_POST['cli_telefono'] = filter_var($_POST['cli_telefono'], FILTER_VALIDATE_INT);
 
-// consulta
-try {
-    $nit = $_GET['cli_nit'];
-    $telefono = $_GET['cli_telefono'];
-    $_GET['cli_nombres'] = htmlspecialchars($_GET['cli_nombres']);
-    $_GET['cli_apellidos'] = htmlspecialchars($_GET['cli_apellidos']);
-    $_GET['cli_nit'] = filter_var($nit, FILTER_VALIDATE_INT);
-    $_GET['cli_telefono'] = filter_var($telefono, FILTER_VALIDATE_INT);
+if ($_POST['cli_nombres'] == '' || $_POST['cli_apellidos'] == '' || $_POST['cli_nit'] == '' || $_POST['cli_telefono'] == '') {
 
-    $Cli_Consulta = new Cliente($_GET);
-    $cliente = $Cli_Consulta->buscar();
     $resultado = [
-        'mensaje' => 'Datos encontrados',
-        'datos' => $cliente,
-        'codigo' => 1
+        'mensaje' => 'DEBE VALIDAR LOS DATOS',
+        'codigo' => 2
     ];
-} catch (Exception $e) {
-    $resultado = [
-        'mensaje' => 'OCURRIO UN ERROR EN LA EJECUCIÓN',
-        'detalle' => $e->getMessage(),
-        'codigo' => 0
-    ];
+} else {
+    try {
+     
+        $clienteNuevo = new  cliente($_POST);
+
+        $modficar = $clienteNuevo->modificar();
+
+        $resultado = [
+            'mensaje' => 'CLIENTE MODIFICADO CORRECTAMENTE',
+            'codigo' => 1
+        ];
+
+    } catch (PDOException $pe) {
+        $resultado = [
+            'mensaje' => 'OCURRIO UN ERROR MODIFICANDO EL REGISTRO A LA BD',
+            'detalle' => $pe->getMessage(),
+            'codigo' => 0
+        ];
+    } catch (Exception $e) {
+        $resultado = [
+            'mensaje' => 'OCURRIO ERROR EN LA EJECUCION',
+            'detalle' => $e->getMessage(),
+            'codigo' => 0
+        ];
+    }
+
 }
-$alertas = ['danger', 'success', 'warning'];
 
+$alertas = ['danger', 'success', 'warning'];
+  
 include_once '../../views/templates/header.php'; ?>
 
 <div class="row justify-content-center">
@@ -44,51 +57,5 @@ include_once '../../views/templates/header.php'; ?>
     </div>
 </div>
 
-<!-- Se imprime los resultados -->
-<h1 class="text-center">Clientes Ingresados </h1>
-    <div class="row justify-content-center">
-        <div class="col-lg-10">
-            <table class="table table-bordered table-hover">
-                <thead> 
-                    <tr>
-                        <th>No.</th>
-                        <th>Nombre</th>
-                        <th>Apellidos</th>
-                        <th>NIT</th>
-                        <th>Telefono</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php if($resultado['codigo'] == 1 ) : ?>
-                        <?php foreach ($cliente as $key => $opcion) : ?>
-                            <tr>
-                                <td><?= $key + 1?></td>
-                                <td><?= $opcion['cli_nombres'] ?></td>
-                                <td><?= $opcion['cli_apellidos'] ?></td>
-                                <td><?= $opcion['cli_nit'] ?></td>
-                                <td><?= $opcion['cli_telefono'] ?></td>
-                                <td class="text-center">
-                                <div class="dropdown">
-                                    <button class="btn btn-info dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                        Acciones
-                                    </button>
-                                    <ul class="dropdown-menu">
-                                        <li><a class="dropdown-item" href="../../views/clientes/modificar_cliente.php?cli_id=<?= base64_encode($opcion['cli_id'])?>"><i class="bi bi-pencil-square me-2"></i>Modificar</a></li>
-                                        <li><a class="dropdown-item" href="eliminar.php?cli_id=<?= base64_encode($opcion['cli_id'])?>"><i class="bi bi-trash me-2"></i>Eliminar</a></li>
-                                    </ul>
-                                </div>
-                                </td>
-                            </tr>
-                        <?php endforeach ?>
-                    <?php else : ?>
-                        <tr>
-                            <td colspan="4">No hay productos registrados</td>
-                        </tr>  
-                    <?php endif ?>
-                </tbody>
-                        
-            </table>
-        </div>        
-    </div>        
 
 <?php include_once '../../views/templates/footer.php'; ?>
